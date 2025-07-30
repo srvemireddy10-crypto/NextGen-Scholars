@@ -1,0 +1,86 @@
+.contact-main {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  line-height: 1.6;
+}
+.contact-form {
+  max-width: 500px;
+  margin-top: 1.5rem;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.contact-form button {
+  background-color: #1e1e2f;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+.contact-form button:hover {
+  background-color: #00d4ff;
+  color: black;
+}
+footer {
+  background-color: #1e1e2f;
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+}
+.subscribe-box {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.subscribe-box h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #1e1e2f;
+}
+.subscribe-box form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+.subscribe-box input[type="text"],
+.subscribe-box input[type="email"] {
+  flex: 1 1 180px;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+.subscribe-box button {
+  background-color: #1e1e2f;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+  display: inline;
+}
+.subscribe-box button:hover {
+  background-color: #00d4ff;
+  color: black;
+} 

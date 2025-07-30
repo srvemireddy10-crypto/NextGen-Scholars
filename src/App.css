@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+}
+.header {
+  background-color: #1e1e2f;
+  color: white;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 0 1.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  user-select: none;
+}
+.menu-icon {
+  font-size: 1.8rem;
+  cursor: pointer;
+  position: absolute;
+  left: 75vw;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #1e1e2f;
+  color: white;
+  padding-top: 60px;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+.sidebar a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #333;
+  transition: background 0.3s;
+}
+.sidebar a:hover {
+  background-color: #00d4ff;
+  color: black;
+}
+.sidebar.open {
+  right: 0;
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+}
+.overlay.show {
+  display: block;
+}
+main {
+  padding: 2rem;
+  margin-top: 60px;
+}
+@media (max-width: 600px) {
+  .menu-icon {
+    left: 85vw;
+  }
+  .sidebar {
+    width: 70vw;
+    min-width: 180px;
+  }
+} 
