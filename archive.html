@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Archive | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      overflow-x: hidden;
+      background-color: #fff;
+      color: #181824;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 75vw;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #1e1e2f;
+      color: white;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    main {
+      padding-top: 80px;
+      padding-left: 2vw;
+      padding-right: 2vw;
+      line-height: 1.6;
+      background: #fff;
+      min-height: 100vh;
+    }
+
+    .main-title {
+      font-size:2.7rem;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-weight:900;
+      margin-bottom:0.7rem;
+      color:#181824;
+      letter-spacing:1px;
+      text-align: center;
+      position: relative;
+      line-height: 1.1;
+    }
+
+    .main-title::after {
+      content: '';
+      display: block;
+      margin: 0.7rem auto 0 auto;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #1e1e2f 60%, #fff 100%);
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      color:#555;
+      margin-bottom:2.5rem;
+      text-align: center;
+    }
+
+    .category-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 2.5rem 0 0.5rem 0;
+      color: #181824;
+      letter-spacing: 0.5px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .category-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: #181824;
+      margin-top: 7px;
+      border-radius: 2px;
+    }
+
+    .row-container {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    .scroll-row {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      gap: 1.2rem;
+      padding: 0.5rem 0 1.5rem 0;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      align-items: center;
+    }
+
+    .scroll-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Remove scrollbar for science section only */
+    #science {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    #science::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1e1e2f;
+      color: #fff;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.7rem;
+      z-index: 10;
+      transition: background 0.3s, color 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scroll-arrow:hover {
+      background: #181824;
+      color: #fff;
+    }
+
+    .scroll-left {
+      left: -22px;
+    }
+
+    .scroll-right {
+      right: -22px;
+    }
+
+    .paper-card {
+      min-width: 220px;
+      max-width: 220px;
+      background: #1e1e2f;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      border: 1.5px solid #23233a;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .paper-card:hover {
+      transform: scale(1.06);
+      border-color: #fff;
+      box-shadow: 0 6px 24px rgba(30,30,47,0.10);
+    }
+
+    .paper-image {
+      width: 100%;
+      height: 120px;
+      background: #23233a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #fff;
+      border-bottom: 2px solid #23233a;
+    }
+
+    .paper-info {
+      padding: 1rem 1rem 0.7rem 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .paper-title {
+      font-size: 1.02rem;
+      font-weight: bold;
+      margin-bottom: 0.4rem;
+      color: #fff;
+      line-height: 1.3;
+      letter-spacing: 0.1px;
+    }
+
+    .paper-author {
+      font-size: 0.89rem;
+      color: #e0e0e0;
+      margin-bottom: 0.2rem;
+    }
+
+    .paper-date {
+      font-size: 0.8rem;
+      color: #fff;
+      margin-bottom: 0.2rem;
+    }
+
+    .paper-genre {
+      font-size: 0.8rem;
+      color: #fff;
+      font-weight: bold;
+      margin-top: auto;
+      opacity: 0.9;
+    }
+
+    .see-all-btn {
+      min-width: 60px;
+      max-width: 60px;
+      height: 60px;
+      background: #1e1e2f;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.05rem;
+      transition: all 0.2s;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(30,30,47,0.10);
+      /* Center vertically with cards */
+      align-self: center;
+    }
+
+    .see-all-btn:hover {
+      background: #fff;
+      color: #1e1e2f;
+      border: 2px solid #1e1e2f;
+    }
+
+    footer {
+      background-color: #1e1e2f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+      margin-top: 3rem;
+    }
+
+    .subscribe-box {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .subscribe-box h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #1e1e2f;
+    }
+
+    .subscribe-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .subscribe-box input[type="text"],
+    .subscribe-box input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .subscribe-box button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-box button:hover {
+      background-color: #181824;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <main>
+    <h1 class="main-title">Research Archive</h1>
+    <p class="subtitle">Browse our collection of published research papers by category</p>
+
+    <!-- Science Category -->
+    <div class="row-container">
+      <div class="category-title">Science</div>
+      <button class="scroll-arrow scroll-left" onclick="scrollRow('science', -1)">&#8249;</button>
+      <button class="scroll-arrow scroll-right" onclick="scrollRow('science', 1)">&#8250;</button>
+      <div class="scroll-row" id="science">
+        <div class="paper-card"><div class="paper-image">🔬</div><div class="paper-info"><div class="paper-title">Quantum Entanglement in Biological Systems</div><div class="paper-author">Dr. Sarah Chen</div><div class="paper-date">March 15, 2024</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧬</div><div class="paper-info"><div class="paper-title">CRISPR Gene Editing Breakthroughs</div><div class="paper-author">Prof. Michael Rodriguez</div><div class="paper-date">February 28, 2024</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🌌</div><div class="paper-info"><div class="paper-title">Dark Matter Detection Methods</div><div class="paper-author">Dr. Emily Watson</div><div class="paper-date">January 12, 2024</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">⚛️</div><div class="paper-info"><div class="paper-title">Nanotechnology in Medicine</div><div class="paper-author">Dr. James Thompson</div><div class="paper-date">December 5, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧪</div><div class="paper-info"><div class="paper-title">Synthetic Biology Applications</div><div class="paper-author">Prof. Lisa Park</div><div class="paper-date">November 20, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🌱</div><div class="paper-info"><div class="paper-title">Photosynthesis Under Extreme Conditions</div><div class="paper-author">Dr. Alan Smith</div><div class="paper-date">October 10, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🦠</div><div class="paper-info"><div class="paper-title">Microbial Life in Space</div><div class="paper-author">Dr. Priya Patel</div><div class="paper-date">September 2, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧲</div><div class="paper-info"><div class="paper-title">Magnetoreception in Animals</div><div class="paper-author">Dr. Leo Kim</div><div class="paper-date">August 8, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🌋</div><div class="paper-info"><div class="paper-title">Volcanic Activity and Climate</div><div class="paper-author">Dr. Maria Lopez</div><div class="paper-date">July 15, 2023</div><div class="paper-genre">Science</div></div></div>
+        <div class="paper-card"><div class="paper-image">🦋</div><div class="paper-info"><div class="paper-title">Butterfly Migration Patterns</div><div class="paper-author">Dr. Emma White</div><div class="paper-date">June 10, 2023</div><div class="paper-genre">Science</div></div></div>
+        <a href="#" class="see-all-btn" title="See All Science">See All</a>
+      </div>
+    </div>
+
+    <!-- Medical Category -->
+    <div class="row-container">
+      <div class="category-title">Medical</div>
+      <button class="scroll-arrow scroll-left" onclick="scrollRow('medical', -1)">&#8249;</button>
+      <button class="scroll-arrow scroll-right" onclick="scrollRow('medical', 1)">&#8250;</button>
+      <div class="scroll-row" id="medical">
+        <a href="article-wall-colors.html" style="text-decoration: none; color: inherit;"><div class="paper-card"><div class="paper-image">🎨</div><div class="paper-info"><div class="paper-title">The Impact of Classroom Wall Colors on Cognitive Skills in High School Students</div><div class="paper-author">Srijan Vemireddy</div><div class="paper-date">January 11, 2025</div><div class="paper-genre">Medical</div></div></div></a>
+        <div class="paper-card"><div class="paper-image">🏥</div><div class="paper-info"><div class="paper-title">AI in Diagnostic Imaging</div><div class="paper-author">Dr. Robert Kim</div><div class="paper-date">March 10, 2024</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">💊</div><div class="paper-info"><div class="paper-title">Personalized Medicine Approaches</div><div class="paper-author">Dr. Amanda Foster</div><div class="paper-date">February 15, 2024</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧠</div><div class="paper-info"><div class="paper-title">Neural Interface Technology</div><div class="paper-author">Prof. David Wilson</div><div class="paper-date">January 25, 2024</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🫀</div><div class="paper-info"><div class="paper-title">Cardiovascular Disease Prevention</div><div class="paper-author">Dr. Maria Garcia</div><div class="paper-date">December 18, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🦷</div><div class="paper-info"><div class="paper-title">Dental Regeneration Techniques</div><div class="paper-author">Dr. John Lee</div><div class="paper-date">November 2, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🩺</div><div class="paper-info"><div class="paper-title">Telemedicine in Rural Areas</div><div class="paper-author">Dr. Anna Ivanova</div><div class="paper-date">October 12, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧫</div><div class="paper-info"><div class="paper-title">Cancer Immunotherapy Advances</div><div class="paper-author">Dr. Olivia Brown</div><div class="paper-date">September 5, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🦾</div><div class="paper-info"><div class="paper-title">Bionic Limbs and Prosthetics</div><div class="paper-author">Dr. Ethan Carter</div><div class="paper-date">August 18, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧻</div><div class="paper-info"><div class="paper-title">Gut Microbiome Discoveries</div><div class="paper-author">Dr. Mia Kim</div><div class="paper-date">July 22, 2023</div><div class="paper-genre">Medical</div></div></div>
+        <a href="#" class="see-all-btn" title="See All Medical">See All</a>
+      </div>
+    </div>
+
+    <!-- STEM Category -->
+    <div class="row-container">
+      <div class="category-title">STEM</div>
+      <button class="scroll-arrow scroll-left" onclick="scrollRow('stem', -1)">&#8249;</button>
+      <button class="scroll-arrow scroll-right" onclick="scrollRow('stem', 1)">&#8250;</button>
+      <div class="scroll-row" id="stem">
+        <div class="paper-card"><div class="paper-image">🤖</div><div class="paper-info"><div class="paper-title">Machine Learning in Education</div><div class="paper-author">Dr. Jennifer Lee</div><div class="paper-date">March 8, 2024</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🔧</div><div class="paper-info"><div class="paper-title">Robotics in Manufacturing</div><div class="paper-author">Prof. Carlos Martinez</div><div class="paper-date">February 22, 2024</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">💻</div><div class="paper-info"><div class="paper-title">Quantum Computing Applications</div><div class="paper-author">Dr. Alex Johnson</div><div class="paper-date">January 30, 2024</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">📱</div><div class="paper-info"><div class="paper-title">Mobile App Development Trends</div><div class="paper-author">Prof. Rachel Green</div><div class="paper-date">December 10, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🛰️</div><div class="paper-info"><div class="paper-title">Satellite Communication Advances</div><div class="paper-author">Dr. Omar Farouk</div><div class="paper-date">November 18, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🕹️</div><div class="paper-info"><div class="paper-title">Gamification in STEM Education</div><div class="paper-author">Dr. Emily Brown</div><div class="paper-date">October 5, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧮</div><div class="paper-info"><div class="paper-title">Abacus in Modern Computing</div><div class="paper-author">Dr. Victor Lin</div><div class="paper-date">September 1, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🦾</div><div class="paper-info"><div class="paper-title">AI-Powered Prosthetics</div><div class="paper-author">Dr. Zoe Carter</div><div class="paper-date">August 10, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧑‍🔬</div><div class="paper-info"><div class="paper-title">Women in STEM Leadership</div><div class="paper-author">Dr. Grace Lee</div><div class="paper-date">July 5, 2023</div><div class="paper-genre">STEM</div></div></div>
+        <a href="#" class="see-all-btn" title="See All STEM">See All</a>
+      </div>
+    </div>
+
+    <!-- Mathematics Category -->
+    <div class="row-container">
+      <div class="category-title">Mathematics</div>
+      <button class="scroll-arrow scroll-left" onclick="scrollRow('math', -1)">&#8249;</button>
+      <button class="scroll-arrow scroll-right" onclick="scrollRow('math', 1)">&#8250;</button>
+      <div class="scroll-row" id="math">
+        <div class="paper-card"><div class="paper-image">📐</div><div class="paper-info"><div class="paper-title">Fractal Geometry in Nature</div><div class="paper-author">Dr. Thomas Brown</div><div class="paper-date">March 12, 2024</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">🔢</div><div class="paper-info"><div class="paper-title">Number Theory Applications</div><div class="paper-author">Prof. Sophia Anderson</div><div class="paper-date">February 5, 2024</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">📊</div><div class="paper-info"><div class="paper-title">Statistical Modeling Techniques</div><div class="paper-author">Dr. Kevin Zhang</div><div class="paper-date">January 18, 2024</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">🎲</div><div class="paper-info"><div class="paper-title">Probability Theory in Finance</div><div class="paper-author">Prof. Nicole White</div><div class="paper-date">December 3, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">➗</div><div class="paper-info"><div class="paper-title">Algebraic Structures in Cryptography</div><div class="paper-author">Dr. Ivan Petrov</div><div class="paper-date">November 11, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">📏</div><div class="paper-info"><div class="paper-title">Geometry in Architecture</div><div class="paper-author">Prof. Maria Rossi</div><div class="paper-date">October 8, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧮</div><div class="paper-info"><div class="paper-title">Mathematical Models in Biology</div><div class="paper-author">Dr. Samuel Green</div><div class="paper-date">September 3, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">🧊</div><div class="paper-info"><div class="paper-title">Topology and Ice Crystals</div><div class="paper-author">Dr. Elsa Frost</div><div class="paper-date">August 14, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <div class="paper-card"><div class="paper-image">📚</div><div class="paper-info"><div class="paper-title">History of Calculus</div><div class="paper-author">Prof. Isaac Newton</div><div class="paper-date">July 1, 2023</div><div class="paper-genre">Mathematics</div></div></div>
+        <a href="#" class="see-all-btn" title="See All Math">See All</a>
+      </div>
+    </div>
+
+    <!-- Technology Category -->
+    <div class="row-container">
+      <div class="category-title">Technology</div>
+      <button class="scroll-arrow scroll-left" onclick="scrollRow('tech', -1)">&#8249;</button>
+      <button class="scroll-arrow scroll-right" onclick="scrollRow('tech', 1)">&#8250;</button>
+      <div class="scroll-row" id="tech">
+        <div class="paper-card"><div class="paper-image">🚗</div><div class="paper-info"><div class="paper-title">Autonomous Vehicle Safety</div><div class="paper-author">Dr. Mark Davis</div><div class="paper-date">March 20, 2024</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🌐</div><div class="paper-info"><div class="paper-title">Blockchain in Healthcare</div><div class="paper-author">Prof. Lisa Chen</div><div class="paper-date">February 28, 2024</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🔋</div><div class="paper-info"><div class="paper-title">Battery Technology Advances</div><div class="paper-author">Dr. Ryan Miller</div><div class="paper-date">January 15, 2024</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">📡</div><div class="paper-info"><div class="paper-title">5G Network Security</div><div class="paper-author">Prof. Daniel Taylor</div><div class="paper-date">December 8, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🖥️</div><div class="paper-info"><div class="paper-title">Edge Computing for IoT</div><div class="paper-author">Dr. Chloe Nguyen</div><div class="paper-date">November 19, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">📱</div><div class="paper-info"><div class="paper-title">Mobile Security Trends</div><div class="paper-author">Prof. Ethan Clark</div><div class="paper-date">October 14, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🛰️</div><div class="paper-info"><div class="paper-title">Satellite Internet Expansion</div><div class="paper-author">Dr. Linda Park</div><div class="paper-date">September 9, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🤖</div><div class="paper-info"><div class="paper-title">AI in Cybersecurity</div><div class="paper-author">Dr. Henry Adams</div><div class="paper-date">August 21, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <div class="paper-card"><div class="paper-image">🕹️</div><div class="paper-info"><div class="paper-title">Cloud Gaming Platforms</div><div class="paper-author">Prof. Julia Smith</div><div class="paper-date">July 13, 2023</div><div class="paper-genre">Technology</div></div></div>
+        <a href="#" class="see-all-btn" title="See All Tech">See All</a>
+      </div>
+    </div>
+  </main>
+   
+  <footer>
+    <div class="subscribe-box">
+      <h3>Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    function scrollRow(rowId, direction) {
+      const row = document.getElementById(rowId);
+      const scrollAmount = 300;
+      row.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  </script>
+
+</body>
+</html>

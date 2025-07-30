@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Submit Details | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background: #f7f8fa;
+      color: #181824;
+      overflow-x: hidden;
+    }
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 75vw;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+    .sidebar.open { right: 0; }
+    .overlay.show { display: block; }
+    .details-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin-top: 90px;
+    }
+    .details-card {
+      background: #fff;
+      padding: 2.5rem 2rem 2rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(30,30,47,0.08);
+      max-width: 420px;
+      width: 100%;
+      margin: 2rem auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .details-title {
+      font-size: 2rem;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 900;
+      color: #1e1e2f;
+      margin-bottom: 0.7rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    .details-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
+    .details-form label {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      color: #1e1e2f;
+    }
+    .details-form input[type="text"],
+    .details-form input[type="email"],
+    .details-form input[type="tel"] {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #f7f8fa;
+    }
+    .details-form input[type="file"] {
+      padding: 0.5rem 0;
+      font-size: 1rem;
+      background: #f7f8fa;
+    }
+    .details-form button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 1rem 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .details-form button:hover, .details-form button:active {
+      background: #00d4ff;
+      color: #181824;
+    }
+    @media (max-width: 600px) {
+      .details-card { padding: 1.2rem 0.5rem; }
+    }
+    footer {
+      background-color: #1e1e2f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+      margin-top: 0;
+    }
+    .subscribe-box {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .subscribe-box h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #1e1e2f;
+    }
+    .subscribe-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .subscribe-box input[type="text"],
+    .subscribe-box input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .subscribe-box button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease;
+    }
+    .subscribe-box button:hover {
+      background-color: #00d4ff;
+      color: #181824;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+  <div class="details-container">
+    <div class="details-card">
+      <div class="details-title">Submit Your Article</div>
+      <form class="details-form" action="https://formsubmit.co/nextgenscholarsbusiness@gmail.com" method="POST" enctype="multipart/form-data">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required />
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required />
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required />
+        <label for="mentor-name">Research Mentor Name</label>
+        <input type="text" id="mentor-name" name="mentor-name" required />
+        <label for="mentor-email">Research Mentor Email</label>
+        <input type="email" id="mentor-email" name="mentor-email" required />
+        <label for="paper">Upload Your Paper</label>
+        <input type="file" id="paper" name="attachment" accept=".pdf,.doc,.docx" required />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+  <footer style="background-color: #1e1e2f; padding: 2rem 1.5rem; display: flex; justify-content: center; box-shadow: 0 -3px 6px rgba(0,0,0,0.2); margin-top: 0;">
+    <div class="subscribe-box">
+      <h3>Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+  </script>
+</body>
+</html> 

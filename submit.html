@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Submit | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      overflow-x: hidden;
+      background: #f7f8fa;
+      color: #181824;
+    }
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 75vw;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+    .sidebar.open { right: 0; }
+    .overlay.show { display: block; }
+    .submit-flex {
+      display: flex;
+      min-height: 100vh;
+      margin-top: 90px;
+    }
+    .submit-image {
+      flex: 1 1 40%;
+      background: linear-gradient(120deg, rgba(30,30,47,0.92) 60%, rgba(0,212,255,0.25) 100%), url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+      min-width: 280px;
+      max-width: 420px;
+      height: auto;
+    }
+    .submit-content {
+      flex: 2 1 60%;
+      background: #fff;
+      padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+      box-shadow: 0 4px 24px rgba(30,30,47,0.08);
+      border-radius: 0 0 0 0;
+      margin: 0 auto;
+      min-width: 320px;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .submit-title {
+      font-size: 2.5rem;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-weight: 900;
+      color: #1e1e2f;
+      margin-bottom: 0.5rem;
+      text-align: left;
+      letter-spacing: 1px;
+    }
+    .submit-subtitle {
+      color: #003366;
+      font-size: 1.2rem;
+      margin-bottom: 2.2rem;
+      text-align: left;
+    }
+    .submit-section {
+      margin-bottom: 2.2rem;
+    }
+    .submit-section-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #1e1e2f;
+      margin-bottom: 0.2rem;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .submit-section-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #1e1e2f;
+      margin-bottom: 0.5rem;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .submit-section ul {
+      margin: 0 0 0.7rem 1.2rem;
+      padding: 0;
+    }
+    .submit-section li {
+      margin-bottom: 0.4rem;
+      font-size: 1.05rem;
+    }
+    .submit-section a {
+      color: #00d4ff;
+      text-decoration: underline;
+      font-size: 1.05rem;
+    }
+    .submit-section a:hover {
+      color: #1e1e2f;
+    }
+    .submit-form {
+      margin-top: 2.5rem;
+      background: #f7f8fa;
+      padding: 1.5rem 1.5rem 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(30,30,47,0.07);
+      max-width: 500px;
+    }
+    .submit-form input, .submit-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    .submit-form button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+    .submit-form button:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+    @media (max-width: 900px) {
+      .submit-flex { flex-direction: column; }
+      .submit-image { min-height: 180px; max-width: 100vw; }
+      .submit-content { padding: 2rem 1rem; }
+    }
+    .main-submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      background: #1e1e2f;
+      color: #fff;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 1.2rem 0;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(30,30,47,0.10);
+      transition: background 0.2s, color 0.2s;
+    }
+    .main-submit-btn:hover, .main-submit-btn:active {
+      background: #00d4ff;
+      color: #181824;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+  <div class="submit-flex">
+    <div class="submit-image"></div>
+    <div class="submit-content">
+      <div class="submit-title">Submit Your Research</div>
+      <div class="submit-subtitle">Share your discoveries and ideas with the world</div>
+      <div class="submit-section">
+        <div class="submit-section-number">01</div>
+        <div class="submit-section-title">What Can You Submit?</div>
+        <ul>
+          <li><b>Original Research:</b> Present new findings from your own experiments or studies.</li>
+          <li><b>Literature Review:</b> Summarize and discuss the current state of research on a topic.</li>
+          <li><b>Opinion or Perspective:</b> Offer your unique viewpoint on a scientific, STEM, or social science issue.</li>
+          <li><b>Science Communication:</b> Write articles that make complex topics accessible to a broad audience.</li>
+        </ul>
+      </div>
+      <div class="submit-section">
+        <div class="submit-section-number">02</div>
+        <div class="submit-section-title">Submission Guidelines</div>
+        <ul>
+          <li>All work must be your own and not previously published.</li>
+          <li>Use <b>MLA format</b> for all citations and references.</li>
+          <li>Write in clear, US English and check for grammar and spelling.</li>
+          <li>Plagiarism is not tolerated and will result in rejection.</li>
+        </ul>
+      </div>
+      <div class="submit-section">
+        <div class="submit-section-number">02A</div>
+        <div class="submit-section-title">Detailed Paper Guidelines</div>
+        <ul>
+          <li><b>Who Can Submit:</b> Submissions are open to students who are currently in middle school or high school.</li>
+          <li><b>Required Paper Structure:</b> Each paper must include the following sections:
+            <ul>
+              <li>Abstract</li>
+              <li>Introduction</li>
+              <li>Methods / Discussion</li>
+              <li>Results</li>
+              <li>Conclusion</li>
+              <li>References (all sources must be cited)</li>
+            </ul>
+          </li>
+          <li><b>Formatting:</b> All papers must be double-spaced and use <b>MLA format</b> for citations and references.</li>
+          <li><b>File Types:</b> All submissions must be in Word (.doc or .docx) or PDF format. Submit your paper as a Word document or PDF file.</li>
+          <li><b>Plagiarism:</b> There should be <b>no plagiarism</b>. All work must be original and written by the submitting student(s).</li>
+          <li><b>AI Usage:</b> We encourage the use of AI as a tool for brainstorming, research, and idea generation. However, <b>AI should not write the research paper</b>. All writing must be done by a human. Submissions written by AI will not be accepted.</li>
+        </ul>
+      </div>
+      <div class="submit-section">
+        <div class="submit-section-number">03</div>
+        <div class="submit-section-title">How It Works</div>
+        <ul>
+          <li>Our editors will review your submission for quality and originality.</li>
+          <li>Selected articles may receive feedback for revision before publication.</li>
+          <li>Accepted work will be published online and may be featured in our journal.</li>
+        </ul>
+      </div>
+      <div class="submit-section">
+        <div class="submit-section-number">04</div>
+        <div class="submit-section-title">Why Publish With Us?</div>
+        <ul>
+          <li>Reach a wide audience of students, educators, and researchers.</li>
+          <li>Build your academic and professional portfolio.</li>
+          <li>Contribute to the advancement of knowledge in your field.</li>
+          <li>Publishing research as a high schooler is one of the best extracurriculars and will make you stand out to colleges and future opportunities.</li>
+        </ul>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 2.5rem;">
+        <a href="submit-details.html" class="main-submit-btn">Submit Your Article</a>
+      </div>
+    </div>
+  </div>
+  <footer style="background-color: #1e1e2f; padding: 2rem 1.5rem; display: flex; justify-content: center; box-shadow: 0 -3px 6px rgba(0,0,0,0.2); margin-top: 0;">
+    <div class="subscribe-box" style="background: white; padding: 1.5rem 2rem; border-radius: 10px; max-width: 500px; width: 100%; box-sizing: border-box; text-align: center; margin: 0 auto;">
+      <h3 style="margin-top: 0; margin-bottom: 1rem; color: #1e1e2f;">Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+        <input type="text" name="name" placeholder="Your Name" required style="flex: 1 1 180px; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box;" />
+        <input type="email" name="email" placeholder="Your Email" required style="flex: 1 1 180px; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box;" />
+        <button type="submit" style="background-color: #1e1e2f; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; flex-shrink: 0; transition: background-color 0.3s ease;">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

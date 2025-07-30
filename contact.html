@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 75vw;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    .contact-container {
+      margin-top: 90px;
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .contact-hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .contact-hero h1 {
+      font-size: 3.5rem;
+      color: #1e1e2f;
+      margin-bottom: 1rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .contact-hero p {
+      font-size: 1.3rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    .contact-card {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #1e1e2f, #00d4ff);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    }
+
+    .contact-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      color: #1e1e2f;
+    }
+
+    .contact-card h3 {
+      font-size: 1.8rem;
+      color: #1e1e2f;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .contact-card p {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .contact-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e1e2f, #00d4ff);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .contact-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      color: white;
+    }
+
+    .contact-info {
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: white;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      margin-top: 3rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .contact-info h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 900;
+    }
+
+    .contact-info p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .contact-details {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .contact-detail i {
+      font-size: 1.5rem;
+      color: #00d4ff;
+    }
+
+    .social-links {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .social-link {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .social-link:hover {
+      background: #00d4ff;
+      transform: translateY(-3px);
+    }
+
+    footer {
+      background-color: #1e1e2f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+      margin-top: 4rem;
+    }
+
+    .subscribe-box {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .subscribe-box h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #1e1e2f;
+    }
+
+    .subscribe-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .subscribe-box input[type="text"],
+    .subscribe-box input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .subscribe-box button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-box button:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    @media (max-width: 768px) {
+      .contact-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .contact-details {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+  <header>
+    <a href="home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="contact-container">
+    <div class="contact-hero">
+      <h1>Get In Touch</h1>
+      <p>We're here to help and answer any questions you might have. We look forward to hearing from you.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h3>Email Us</h3>
+        <p>Send us an email and we'll get back to you as soon as possible.</p>
+        <a href="mailto:nextgenscholarsbusiness@gmail.com" class="contact-link">
+          <i class="fas fa-paper-plane"></i> Send Email
+        </a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <i class="fas fa-phone"></i>
+        </div>
+        <h3>Call Us</h3>
+        <p>Give us a call during business hours and we'll be happy to help.</p>
+        <a href="tel:919-457-7008" class="contact-link">
+          <i class="fas fa-phone"></i> Call Now
+        </a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <i class="fas fa-clock"></i>
+        </div>
+        <h3>Response Time</h3>
+        <p>We typically respond to all inquiries within 24 hours during business days.</p>
+        <div class="contact-link" style="background: #28a745;">
+          <i class="fas fa-check-circle"></i> Quick Response
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h3>Student Support</h3>
+        <p>Questions about submissions, guidelines, or the publishing process? We're here to help!</p>
+        <a href="mailto:nextgenscholarsbusiness@gmail.com" class="contact-link">
+          <i class="fas fa-graduation-cap"></i> Get Support
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-info">
+      <h2>Contact Information</h2>
+      <p>Ready to get started? Here's how you can reach us:</p>
+      
+      <div class="contact-details">
+        <div class="contact-detail">
+          <i class="fas fa-envelope"></i>
+          <span>nextgenscholarsbusiness@gmail.com</span>
+        </div>
+        <div class="contact-detail">
+          <i class="fas fa-phone"></i>
+          <span>919-457-7008</span>
+        </div>
+      </div>
+
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@nextgen.scholars7" class="social-link" target="_blank">
+          <i class="fab fa-tiktok"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="social-link">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="subscribe-box">
+      <h3>Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html>

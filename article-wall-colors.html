@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Impact of Classroom Wall Colors on Cognitive Skills in High School Students | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      overflow-x: hidden;
+      background-color: #fff;
+      color: #181824;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 75vw;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    .article-container {
+      margin-top: 90px;
+      padding: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .article-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .article-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #1e1e2f;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .article-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    .article-author {
+      font-weight: bold;
+      color: #1e1e2f;
+    }
+
+    .article-date {
+      color: #888;
+    }
+
+    .article-category {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .article-content {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    .article-content h2 {
+      font-size: 1.8rem;
+      color: #1e1e2f;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .article-content h3 {
+      font-size: 1.4rem;
+      color: #1e1e2f;
+      margin-top: 2rem;
+      margin-bottom: 0.8rem;
+      font-weight: bold;
+    }
+
+    .article-content p {
+      margin-bottom: 1.2rem;
+      text-align: justify;
+    }
+
+    .article-content ul {
+      margin-bottom: 1.2rem;
+      padding-left: 2rem;
+    }
+
+    .article-content li {
+      margin-bottom: 0.5rem;
+    }
+
+    .abstract {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      border-left: 4px solid #4CAF50;
+    }
+
+    .abstract h3 {
+      color: #1e1e2f;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .results-section {
+      background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 2rem 0;
+      border: 1px solid #4CAF50;
+    }
+
+    .results-section h3 {
+      color: #1e1e2f;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .result-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .result-color {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1e1e2f;
+    }
+
+    .result-label {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    .back-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e1e2f, #00d4ff);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      color: white;
+    }
+
+    .works-cited {
+      padding-left: 2rem;
+      text-indent: -2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .works-cited p {
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background-color: #1e1e2f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+      margin-top: 4rem;
+    }
+
+    .subscribe-box {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .subscribe-box h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #1e1e2f;
+    }
+
+    .subscribe-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .subscribe-box input[type="text"],
+    .subscribe-box input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .subscribe-box button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-box button:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    @media (max-width: 768px) {
+      .article-container {
+        padding: 1rem;
+      }
+      
+      .article-title {
+        font-size: 2rem;
+      }
+      
+      .article-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+
+  <div class="sidebar" id="sidebar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="article-container">
+    <a href="archive.html" class="back-button">← Back to Archive</a>
+    
+    <div class="article-header">
+      <h1 class="article-title">The Impact of Classroom Wall Colors on Cognitive Skills in High School Students</h1>
+      <div class="article-meta">
+        <span class="article-author">Srijan Vemireddy</span>
+        <span class="article-date">January 11, 2025</span>
+        <span class="article-category">Medical</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <div class="abstract">
+        <h3>Abstract</h3>
+        <p>The impact of classroom wall colors on cognitive functions, such as memory recall and problem-solving skills, is an unexplored area in educational research. This study explores how different classroom wall colors can affect high school student's ability to recall and retain what they are taught, their ability to solve problems, and other cognitive skills. The objective of this research is to find out whether specific colors enhance or hinder cognitive skills and to determine which colors are best for classrooms. Understanding how wall colors influence learning can help educators and designers create more effective and supportive learning environments. By focusing on high school students, this study aims to provide insights that could lead to improved academic performance and better educational outcomes.</p>
+        <p>The research was conducted using a survey-based method and four cognitive tests of equal difficulty. Three different colors of light along with a control were tested. The colors used for the evaluations were green, blue, and red and white was used as a control. The effect of these colors on a student's cognitive skills was determined. The results showed that students scored the highest under green lighting, with an average score of 68.75, followed by blue lighting at 66.25. Red lighting showed a significant drop in scores with an average score of 57.92. The average score for the control (white) was 61.25.</p>
+      </div>
+
+      <h2>Introduction</h2>
+      <p>The learning environment is crucial to a student's academic performance and overall well-being. Most of the research has been focused on teaching and seating arrangement, but the impact of color on a student's cognitive performance is left unexplored. Color psychology suggests that different colors can influence mood, behavior, and even mental processes. Recently, there has been a growing interest in optimizing the classroom environment to make learning easier and better for students.</p>
+      
+      <p>The purpose of this study is to investigate how different classroom wall colors affect high school students' ability to recall information, solve problems, and perform other cognitive tasks. The specific objectives are to determine which colors positively impact cognitive performance and which may have a negative impact. Based on previous studies and first-hand experience it is hypothesized that cooler colors, such as blue and green, will enhance memory recall and problem-solving skills. In comparison, warmer colors, like red and yellow, may negatively impact these cognitive functions.</p>
+
+      <h2>Literature Review</h2>
+      <p>Previous research has demonstrated that color can significantly impact cognitive functions such as memory and decision-making. Red enhances performance on detail-oriented tasks, including memory recall, while blue enhances creative task performance (Mehta and Zhu 2009, 1226). This suggests that certain colors may be more conducive to specific types of cognitive activities.</p>
+      
+      <p>Green has been found to enhance memory for positive information, suggesting it may facilitate positive emotional processing and learning. Additionally, green is associated with tranquility and can have a calming influence, potentially aiding in tasks that require concentration and reducing anxiety. Blue environments have been shown to improve performance on creative tasks, due to their historical calming effect as they are often associated with things such as the ocean or the sky, which reduces stress and allows for more open-minded thinking.</p>
+
+      <h2>Methodology</h2>
+      <p>The study involved 30 high school students from Wake County. Participants were mostly high school sophomores, and mostly of the male gender. All participants provided informed consent, and the study was conducted in compliance with ethical guidelines. A survey-based experimental design was used to investigate the impact of different classroom colors on cognitive performance.</p>
+      
+      <p>Participants completed four standardized cognitive tests of equal difficulty, each under a different lighting condition: green, blue, red, and white. White lighting served as the control to represent the typical classroom environment. Each test was a total of eight questions with a mix of pattern recognition, odd one-out, analogies, and problem-solving questions. Students were given five minutes to complete each test.</p>
+
+      <div class="results-section">
+        <h3>Results</h3>
+        <p>The results of the cognitive tests conducted under different lighting conditions are presented below. Participants were tested under four lighting conditions: green, blue, red, and white. The white lighting condition served as the control.</p>
+        
+        <div class="results-grid">
+          <div class="result-item">
+            <div class="result-color">🟢</div>
+            <div class="result-score">68.75%</div>
+            <div class="result-label">Green Lighting</div>
+          </div>
+          <div class="result-item">
+            <div class="result-color">🔵</div>
+            <div class="result-score">66.25%</div>
+            <div class="result-label">Blue Lighting</div>
+          </div>
+          <div class="result-item">
+            <div class="result-color">⚪</div>
+            <div class="result-score">59.58%</div>
+            <div class="result-label">White (Control)</div>
+          </div>
+          <div class="result-item">
+            <div class="result-color">🔴</div>
+            <div class="result-score">57.92%</div>
+            <div class="result-label">Red Lighting</div>
+          </div>
+        </div>
+        
+        <p>Participants performed best under green lighting, with an average score of 68.75, followed closely by blue lighting (66.25). Both of these colors resulted in higher scores compared to white lighting, which had an average score of 59.58. Red lighting led to the lowest average score of 57.92, indicating a noticeable decrease in cognitive performance.</p>
+      </div>
+
+      <h2>Discussion</h2>
+      <p>The results of this study reveal that classroom wall colors can significantly impact a student's cognitive skills. Green lighting was associated with the highest average score of 68.75, while red lighting resulted in the lowest average score of 57.92. Blue lighting, while beneficial, showed a slightly smaller improvement over the white (control) lighting condition, with an average score of 66.25 compared to 59.58 for white.</p>
+      
+      <p>The superior performance under green lighting aligns with the idea that green colors increase relaxation and focus, which may enhance cognitive functions such as pattern recognition and problem-solving abilities. Green can be associated with calmness and stability, which may reduce anxiety and help students concentrate better on tasks.</p>
+      
+      <p>In contrast, red lighting led to a significant decline in cognitive performance, with an average score of 57.92. Red is often associated with danger and other emotions, such as increased arousal or anxiety, which could impair cognitive functions that require focus and memory recall.</p>
+
+      <h2>Conclusion</h2>
+      <p>This study investigated the impact of different lighting colors—green, blue, red, and white—on cognitive performance among high school students. The findings revealed that green and blue lighting enhanced cognitive abilities, with green yielding the highest test scores, while red lighting negatively affected performance compared to the white (control) condition.</p>
+      
+      <p>These results suggest that environmental factors, such as color, play a significant role in influencing cognitive functions like memory recall and problem-solving. There is a wide range of real-world applications of this research, for educational environments. By optimizing classroom wall colors, educators can create spaces that are optimal for learning and best help children in their learning experience.</p>
+      
+      <p>In conclusion, the strategic use of color in educational settings offers a way to improve academic performance. Incorporating colors like green and blue may create more effective and supportive learning environments while minimizing the use of red could prevent potential cognitive hindrances.</p>
+
+      <h2>Works Cited</h2>
+      <div class="works-cited">
+        <p>Dzulkifli, Mariam Adawiah, and Muhammad Faiz Mustafar. "The Influence of Color on Memory Performance: A Review." <em>Malaysian Journal of Medical Sciences</em>, vol. 20, no. 2, 2013, pp. 3–9.</p>
+        
+        <p>Elliot, Andrew J., and Markus A. Maier. "Color Psychology: Effects of Perceiving Color on Psychological Functioning in Humans." <em>Frontiers in Psychology</em>, vol. 7, 2016, p. 784.</p>
+        
+        <p>Kuniecki, Michał, et al. "The Color Red Attracts Attention in an Emotional Context: An ERP Study." <em>Frontiers in Human Neuroscience</em>, vol. 9, 2015, p. 212.</p>
+        
+        <p>Mehta, Ravi, and Rui Zhu. "Blue or Red? Exploring the Effect of Color on Cognitive Task Performances." <em>Science</em>, vol. 323, no. 5918, 2009, pp. 1226–29.</p>
+        
+        <p>"How Colors Affect Brain Functioning." <em>Psychology Today</em>, 17 Jan. 2023, www.psychologytoday.com/us/blog/how-my-brain-works/202301/how-colors-affect-brain-functioning.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="subscribe-box">
+      <h3>Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+  </script>
+
+</body>
+</html> 

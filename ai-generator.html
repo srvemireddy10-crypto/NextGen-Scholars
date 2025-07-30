@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Research Generator | NextGen Scholars</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      overflow-x: hidden;
+    }
+
+    header {
+      background-color: #1e1e2f;
+      color: white;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 0 2.5rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      user-select: none;
+    }
+
+    .menu-icon {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: absolute;
+      left: 75vw;
+      top: 50%;
+      transform: translateY(-50%);
+      user-select: none;
+    }
+
+    /* Sidebar on the right */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #1e1e2f;
+      color: white;
+      padding-top: 90px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #333;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    /* Overlay behind sidebar */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    /* Generator Form */
+    .generator-container {
+      background: white;
+      max-width: 900px;
+      margin: -3rem auto 4rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    .form-section {
+      padding: 3rem;
+    }
+
+    .form-title {
+      font-size: 2rem;
+      color: #1e1e2f;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 2rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #1e1e2f;
+      font-size: 1.1rem;
+    }
+
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus,
+    .input-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .generate-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin: 2rem auto 0;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* API Key Input Styling */
+    .api-key-group {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 2px solid #e1e5e9;
+      margin-bottom: 2rem;
+    }
+
+    .api-key-group label {
+      color: #1e1e2f;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .api-key-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .api-key-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .api-key-group small {
+      color: #666;
+      font-size: 0.9rem;
+      display: block;
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .api-key-group small a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .api-key-group small a:hover {
+      text-decoration: underline;
+    }
+
+    /* AI Status Indicator */
+    .ai-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-left: 1rem;
+    }
+
+    .ai-status.real {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .ai-status.built-in {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    /* Results Section */
+    .results-section {
+      background: #f8f9fa;
+      padding: 3rem;
+      display: none;
+    }
+
+    .results-title {
+      font-size: 2rem;
+      color: #1e1e2f;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      border-left: 5px solid #667eea;
+    }
+
+    .result-card h3 {
+      color: #1e1e2f;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .result-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .outline-section {
+      background: #f0f2f7;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+
+    .outline-section h4 {
+      color: #1e1e2f;
+      margin-bottom: 1rem;
+    }
+
+    .outline-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .outline-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e1e5e9;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .outline-list li:before {
+      content: '•';
+      color: #667eea;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .outline-list li:last-child {
+      border-bottom: none;
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    footer {
+      background-color: #1e1e2f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+    }
+
+    .subscribe-box {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      max-width: 500px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .subscribe-box h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #1e1e2f;
+    }
+
+    .subscribe-box form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .subscribe-box input[type="text"],
+    .subscribe-box input[type="email"] {
+      flex: 1 1 180px;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    .subscribe-box button {
+      background-color: #1e1e2f;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: background-color 0.3s ease;
+    }
+
+    .subscribe-box button:hover {
+      background-color: #00d4ff;
+      color: black;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .generator-container {
+        margin: -2rem 1rem 4rem;
+      }
+      
+      .form-section,
+      .results-section {
+        padding: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="Home.html" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;"><img src="public/logo.svg" alt="NextGen Scholars Logo" style="height:80px;"/></a>
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">AI Research Paper Generator</h1>
+      <p class="hero-subtitle">Discover innovative research topics, get detailed outlines, and design experiments with our AI-powered tool</p>
+    </div>
+  </section>
+
+  <div class="generator-container">
+    <div class="form-section">
+      <h2 class="form-title">Generate Your Research Idea</h2>
+      
+      <form id="generatorForm">
+        <div class="input-row">
+          <div class="input-group">
+            <label for="field">Research Field</label>
+            <select id="field" name="field" required>
+              <option value="">Select a field...</option>
+              <option value="psychology">Psychology</option>
+              <option value="education">Education</option>
+              <option value="biology">Biology</option>
+              <option value="chemistry">Chemistry</option>
+              <option value="physics">Physics</option>
+              <option value="computer-science">Computer Science</option>
+              <option value="sociology">Sociology</option>
+              <option value="economics">Economics</option>
+              <option value="environmental-science">Environmental Science</option>
+              <option value="medicine">Medicine</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label for="level">Academic Level</label>
+            <select id="level" name="level" required>
+              <option value="">Select level...</option>
+              <option value="high-school">High School</option>
+              <option value="undergraduate">Undergraduate</option>
+              <option value="graduate">Graduate</option>
+              <option value="phd">PhD</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="interests">Specific Interests (Optional)</label>
+          <textarea id="interests" name="interests" rows="3" placeholder="Describe any specific topics, phenomena, or areas you're interested in..."></textarea>
+        </div>
+
+        <div class="input-group">
+          <label for="methodology">Preferred Methodology</label>
+          <select id="methodology" name="methodology">
+            <option value="">Any methodology</option>
+            <option value="experimental">Experimental</option>
+            <option value="survey">Survey/Questionnaire</option>
+            <option value="case-study">Case Study</option>
+            <option value="literature-review">Literature Review</option>
+            <option value="mixed-methods">Mixed Methods</option>
+          </select>
+        </div>
+
+        <button type="submit" class="generate-btn" id="generateBtn">
+          Generate Research Ideas
+        </button>
+      </form>
+    </div>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Generating your research ideas...</p>
+    </div>
+
+    <div class="results-section" id="results">
+      <h2 class="results-title">Your Research Ideas</h2>
+      <div id="resultsContent"></div>
+    </div>
+  </div>
+
+  <!-- Sidebar on right -->
+  <div class="sidebar" id="sidebar">
+    <a href="Home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="submit.html">Submit</a>
+    <a href="archive.html">Archive</a>
+    <a href="ai-generator.html">AI Generator</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+  <footer>
+    <div class="subscribe-box">
+      <h3>Subscribe to NextGen Scholars</h3>
+      <form action="#" method="post" onsubmit="alert('Subscribed! Thank you!'); return false;">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('show');
+    }
+
+    // Advanced AI Research Idea Generator
+    const researchIdeas = {
+      psychology: {
+        'high-school': [
+          {
+            title: "The Effect of TikTok Dance Trends on Adolescent Motor Memory Consolidation",
+            description: "Investigate how learning viral TikTok dance moves affects the consolidation of motor memory patterns in adolescents compared to traditional dance instruction.",
+            outline: [
+              "Introduction: Motor memory consolidation and social media influence",
+              "Hypothesis: TikTok dances enhance motor memory through social reinforcement",
+              "Methodology: Two-group experimental design with dance learning tasks",
+              "Data Collection: Motor skill retention tests and social engagement metrics",
+              "Analysis: Memory consolidation patterns and social media correlation",
+              "Discussion: Implications for physical education and social learning"
+            ],
+            methodology: "Randomized controlled trial with pre/post motor skill assessments, social media tracking"
+          },
+          {
+            title: "ASMR Trigger Sensitivity: Correlation with Sensory Processing Sensitivity in High School Students",
+            description: "Examine the relationship between ASMR (Autonomous Sensory Meridian Response) trigger sensitivity and sensory processing sensitivity scores in high school populations.",
+            outline: [
+              "Background: ASMR phenomenology and sensory processing theories",
+              "Research Question: Do high SPS individuals experience stronger ASMR responses?",
+              "Experimental Setup: ASMR trigger presentation and SPS assessment",
+              "Data Collection: Physiological responses and self-report measures",
+              "Statistical Analysis: Correlation between SPS scores and ASMR intensity",
+              "Discussion: Sensory processing implications for stress management"
+            ],
+            methodology: "Cross-sectional study with physiological monitoring, validated SPS scales"
+          },
+          {
+            title: "The Impact of Instagram Filter Usage on Self-Perception Accuracy in Adolescents",
+            description: "Study how frequent use of Instagram filters affects adolescents' ability to accurately perceive their natural appearance and body image satisfaction.",
+            outline: [
+              "Literature Review: Social media filters and body image distortion",
+              "Hypothesis: Frequent filter use correlates with distorted self-perception",
+              "Methodology: Longitudinal study with filter usage tracking",
+              "Data Collection: Self-perception accuracy tests and filter usage logs",
+              "Analysis: Correlation between filter frequency and perception accuracy",
+              "Discussion: Digital media literacy and mental health implications"
+            ],
+            methodology: "Longitudinal observational study with digital tracking and perception assessments"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Neural Entrainment to Binaural Beats: Individual Differences in Cognitive Enhancement",
+            description: "Investigate individual differences in cognitive enhancement effects of binaural beats based on baseline brainwave patterns and attention span.",
+            outline: [
+              "Introduction: Binaural beats, neural entrainment, and cognitive enhancement",
+              "Research Questions: Individual differences in entrainment effectiveness",
+              "Methodology: EEG monitoring during binaural beat exposure",
+              "Data Collection: Brainwave patterns, cognitive task performance",
+              "Analysis: Individual response patterns and cognitive enhancement correlation",
+              "Discussion: Personalized cognitive enhancement protocols"
+            ],
+            methodology: "Experimental design with EEG monitoring, cognitive task batteries, individual difference analysis"
+          },
+          {
+            title: "Micro-Expressions in Video Game Players: Emotional Regulation During Competitive Play",
+            description: "Analyze micro-expressions and emotional regulation patterns in competitive video game players during high-stress gaming scenarios.",
+            outline: [
+              "Background: Micro-expressions, emotional regulation, and gaming psychology",
+              "Research Questions: Emotional regulation strategies in competitive gaming",
+              "Methodology: Facial expression analysis during competitive gaming sessions",
+              "Data Collection: Micro-expression coding and emotional state tracking",
+              "Analysis: Pattern recognition in emotional regulation strategies",
+              "Discussion: Gaming psychology and emotional intelligence development"
+            ],
+            methodology: "Observational study with facial expression analysis, emotional state monitoring, pattern recognition"
+          }
+        ]
+      },
+      education: {
+        'high-school': [
+          {
+            title: "The Effectiveness of Meme-Based Learning in Advanced Chemistry Concepts",
+            description: "Compare retention rates of complex chemistry concepts when taught through meme-based mnemonics versus traditional textbook methods.",
+            outline: [
+              "Introduction: Memetic learning theory and chemistry education",
+              "Hypothesis: Meme-based learning improves retention of complex concepts",
+              "Experimental Design: Two-group comparison with meme vs. traditional instruction",
+              "Implementation: Meme creation and application in chemistry lessons",
+              "Assessment: Concept retention tests and engagement metrics",
+              "Analysis: Learning effectiveness and student engagement correlation"
+            ],
+            methodology: "Randomized controlled trial with meme-based intervention, retention testing, engagement surveys"
+          },
+          {
+            title: "Virtual Reality Field Trips: Impact on Geographic Knowledge Retention in Urban Students",
+            description: "Study the effectiveness of VR-based geographic field trips compared to traditional classroom learning for urban students with limited travel experience.",
+            outline: [
+              "Background: VR in education and geographic learning theories",
+              "Research Question: Does VR enhance geographic understanding for urban students?",
+              "Experimental Setup: VR field trips vs. traditional geographic instruction",
+              "Data Collection: Geographic knowledge tests and spatial awareness assessments",
+              "Statistical Analysis: Knowledge retention and spatial understanding comparison",
+              "Discussion: Educational technology accessibility and learning equity"
+            ],
+            methodology: "Quasi-experimental design with VR intervention, geographic knowledge assessment, spatial awareness testing"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "AI-Powered Personalized Learning: Adaptation to Learning Style Preferences",
+            description: "Investigate the effectiveness of AI-driven personalized learning systems that adapt content delivery based on real-time learning style assessment.",
+            outline: [
+              "Literature Review: AI in education and learning style theories",
+              "Research Questions: AI adaptation effectiveness and learning outcomes",
+              "Methodology: AI-powered adaptive learning system implementation",
+              "Data Collection: Learning style assessments and academic performance tracking",
+              "Analysis: Adaptation patterns and learning outcome correlation",
+              "Discussion: Future of AI-driven education and personalized learning"
+            ],
+            methodology: "Longitudinal study with AI system implementation, learning style assessment, performance tracking"
+          }
+        ]
+      },
+      biology: {
+        'high-school': [
+          {
+            title: "The Effect of Smartphone Blue Light on Circadian Rhythm Disruption in Teenagers",
+            description: "Investigate how evening smartphone use affects melatonin production and sleep quality in high school students.",
+            outline: [
+              "Introduction: Blue light exposure, melatonin production, and circadian rhythms",
+              "Hypothesis: Evening smartphone use delays melatonin onset",
+              "Experimental Setup: Controlled smartphone use with blue light monitoring",
+              "Data Collection: Saliva melatonin levels and sleep quality metrics",
+              "Analysis: Blue light exposure correlation with sleep disruption",
+              "Discussion: Teen sleep hygiene and technology use recommendations"
+            ],
+            methodology: "Controlled experiment with blue light monitoring, melatonin testing, sleep quality assessment"
+          },
+          {
+            title: "Microbiome Changes in Students During Exam Stress: Gut-Brain Axis Implications",
+            description: "Examine how academic stress during exam periods affects gut microbiome composition and its relationship to cognitive performance.",
+            outline: [
+              "Background: Gut-brain axis, stress, and microbiome research",
+              "Research Question: Does exam stress alter microbiome composition?",
+              "Methodology: Longitudinal microbiome sampling during exam periods",
+              "Data Collection: Fecal samples, stress levels, and cognitive performance",
+              "Analysis: Microbiome diversity changes and cognitive correlation",
+              "Discussion: Stress management and microbiome health in students"
+            ],
+            methodology: "Longitudinal study with microbiome sampling, stress assessment, cognitive testing"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Epigenetic Changes in Response to Environmental Enrichment: A Study of College Dormitory Environments",
+            description: "Investigate epigenetic modifications in students living in enriched vs. standard dormitory environments and their impact on stress resilience.",
+            outline: [
+              "Literature Review: Epigenetics, environmental enrichment, and stress resilience",
+              "Research Questions: Environmental effects on epigenetic markers",
+              "Methodology: Epigenetic analysis of students in different dormitory types",
+              "Data Collection: DNA methylation analysis and stress resilience measures",
+              "Analysis: Epigenetic modification patterns and environmental correlation",
+              "Discussion: Environmental design for student well-being and academic success"
+            ],
+            methodology: "Cross-sectional study with epigenetic analysis, environmental assessment, stress resilience testing"
+          }
+        ]
+      },
+      chemistry: {
+        'high-school': [
+          {
+            title: "The Chemistry of TikTok Slime: Polymer Cross-Linking in Homemade Slime Formulations",
+            description: "Analyze the chemical properties and polymer cross-linking efficiency of various TikTok slime recipes and their environmental impact.",
+            outline: [
+              "Introduction: Polymer chemistry and cross-linking mechanisms",
+              "Hypothesis: Different slime formulations have varying cross-linking efficiency",
+              "Experimental Setup: Synthesis and analysis of popular slime recipes",
+              "Data Collection: Polymer characterization and environmental impact assessment",
+              "Analysis: Cross-linking efficiency and biodegradability comparison",
+              "Discussion: Sustainable chemistry education and environmental awareness"
+            ],
+            methodology: "Laboratory synthesis, polymer characterization, environmental impact analysis"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Nanoparticle Synthesis from Food Waste: Green Chemistry Applications",
+            description: "Develop and characterize nanoparticles synthesized from food waste materials and evaluate their potential applications in sustainable technology.",
+            outline: [
+              "Background: Green chemistry, nanoparticle synthesis, and food waste utilization",
+              "Research Questions: Food waste-derived nanoparticle properties and applications",
+              "Methodology: Nanoparticle synthesis from various food waste sources",
+              "Data Collection: Particle characterization and application testing",
+              "Analysis: Synthesis efficiency and application effectiveness",
+              "Discussion: Sustainable nanotechnology and circular economy implications"
+            ],
+            methodology: "Laboratory synthesis, nanoparticle characterization, application testing"
+          }
+        ]
+      },
+      physics: {
+        'high-school': [
+          {
+            title: "The Physics of TikTok Sound Waves: Acoustic Resonance in Smartphone Speakers",
+            description: "Investigate the acoustic properties and resonance patterns of popular TikTok sounds and their impact on smartphone speaker performance.",
+            outline: [
+              "Introduction: Acoustic resonance and smartphone speaker physics",
+              "Hypothesis: Certain TikTok sounds cause speaker resonance issues",
+              "Experimental Setup: Acoustic analysis of viral TikTok sounds",
+              "Data Collection: Frequency analysis and speaker response measurements",
+              "Analysis: Resonance patterns and speaker damage correlation",
+              "Discussion: Audio engineering and device protection implications"
+            ],
+            methodology: "Acoustic analysis, frequency measurement, speaker response testing"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Quantum Entanglement in Biological Systems: A Study of Photosynthetic Energy Transfer",
+            description: "Investigate potential quantum entanglement effects in photosynthetic energy transfer processes and their implications for quantum biology.",
+            outline: [
+              "Literature Review: Quantum biology, photosynthesis, and energy transfer",
+              "Research Questions: Quantum effects in biological energy transfer",
+              "Methodology: Quantum state analysis of photosynthetic systems",
+              "Data Collection: Quantum coherence measurements and energy transfer efficiency",
+              "Analysis: Quantum entanglement detection and biological correlation",
+              "Discussion: Quantum biology implications and future research directions"
+            ],
+            methodology: "Quantum state analysis, coherence measurements, energy transfer efficiency testing"
+          }
+        ]
+      },
+      'computer-science': {
+        'high-school': [
+          {
+            title: "AI-Generated Meme Classification: Machine Learning for Internet Culture Analysis",
+            description: "Develop and train machine learning algorithms to classify and analyze AI-generated memes versus human-created memes based on cultural relevance and humor patterns.",
+            outline: [
+              "Introduction: Machine learning, meme analysis, and internet culture",
+              "Hypothesis: AI-generated memes have distinct classification patterns",
+              "Methodology: Dataset creation and machine learning model development",
+              "Data Collection: Meme classification training and validation data",
+              "Analysis: Classification accuracy and cultural pattern recognition",
+              "Discussion: AI creativity and internet culture evolution"
+            ],
+            methodology: "Machine learning development, dataset creation, classification algorithm training"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Blockchain-Based Academic Credential Verification: Decentralized Education Records",
+            description: "Design and implement a blockchain system for secure, decentralized verification of academic credentials and research achievements.",
+            outline: [
+              "Background: Blockchain technology, academic credentialing, and decentralization",
+              "Research Questions: Blockchain efficiency in credential verification",
+              "Methodology: Blockchain system design and implementation",
+              "Data Collection: Credential verification speed and security testing",
+              "Analysis: System performance and security assessment",
+              "Discussion: Future of academic credentialing and blockchain applications"
+            ],
+            methodology: "Blockchain development, system implementation, security and performance testing"
+          }
+        ]
+      },
+      sociology: {
+        'high-school': [
+          {
+            title: "Social Media Echo Chambers: Algorithmic Bias in High School Social Networks",
+            description: "Analyze how social media algorithms create echo chambers in high school social networks and their impact on political awareness and social cohesion.",
+            outline: [
+              "Introduction: Echo chambers, algorithmic bias, and social network theory",
+              "Hypothesis: Social media algorithms reinforce existing social divisions",
+              "Methodology: Social network analysis and algorithmic bias assessment",
+              "Data Collection: Social media usage patterns and political awareness surveys",
+              "Analysis: Echo chamber formation and social cohesion correlation",
+              "Discussion: Digital literacy and social media regulation implications"
+            ],
+            methodology: "Social network analysis, algorithmic bias assessment, survey research"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Cryptocurrency Adoption Patterns: Socioeconomic Factors in Digital Currency Use",
+            description: "Investigate the relationship between socioeconomic status, education level, and cryptocurrency adoption patterns in different demographic groups.",
+            outline: [
+              "Literature Review: Cryptocurrency adoption, socioeconomic factors, and digital literacy",
+              "Research Questions: Socioeconomic determinants of cryptocurrency adoption",
+              "Methodology: Cross-sectional study with demographic and adoption analysis",
+              "Data Collection: Cryptocurrency usage surveys and socioeconomic data",
+              "Analysis: Adoption patterns and socioeconomic correlation",
+              "Discussion: Digital divide and financial inclusion implications"
+            ],
+            methodology: "Cross-sectional study, survey research, socioeconomic analysis"
+          }
+        ]
+      },
+      economics: {
+        'high-school': [
+          {
+            title: "The Economics of Influencer Marketing: ROI Analysis of Teen-Oriented Brand Campaigns",
+            description: "Analyze the return on investment of influencer marketing campaigns targeting teenagers and their effectiveness compared to traditional advertising methods.",
+            outline: [
+              "Introduction: Influencer marketing, ROI analysis, and teen consumer behavior",
+              "Hypothesis: Influencer marketing has higher ROI for teen demographics",
+              "Methodology: Campaign analysis and ROI calculation framework",
+              "Data Collection: Campaign performance metrics and consumer response data",
+              "Analysis: ROI comparison between influencer and traditional marketing",
+              "Discussion: Marketing strategy optimization and consumer psychology"
+            ],
+            methodology: "Campaign analysis, ROI calculation, consumer response measurement"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Behavioral Economics of Subscription Services: Decision Fatigue in Digital Consumption",
+            description: "Investigate how decision fatigue affects subscription service choices and consumer behavior in the digital economy.",
+            outline: [
+              "Background: Behavioral economics, decision fatigue, and subscription models",
+              "Research Questions: Decision fatigue effects on subscription choices",
+              "Methodology: Experimental design with subscription choice scenarios",
+              "Data Collection: Decision-making patterns and subscription behavior",
+              "Analysis: Decision fatigue correlation with subscription choices",
+              "Discussion: Consumer protection and digital economy regulation"
+            ],
+            methodology: "Experimental design, decision-making analysis, subscription behavior tracking"
+          }
+        ]
+      },
+      'environmental-science': {
+        'high-school': [
+          {
+            title: "Microplastic Pollution in School Cafeteria Food: Single-Use Packaging Impact",
+            description: "Analyze microplastic contamination levels in school cafeteria food and its correlation with single-use packaging materials.",
+            outline: [
+              "Introduction: Microplastic pollution, food safety, and packaging materials",
+              "Hypothesis: Single-use packaging contributes to food microplastic contamination",
+              "Experimental Setup: Microplastic analysis of cafeteria food samples",
+              "Data Collection: Microplastic extraction and quantification from food",
+              "Analysis: Contamination levels and packaging material correlation",
+              "Discussion: School food safety and sustainable packaging alternatives"
+            ],
+            methodology: "Microplastic analysis, food sampling, contamination assessment"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Urban Heat Island Effect on Pollinator Diversity: Climate Change Adaptation",
+            description: "Investigate how urban heat island effects impact pollinator diversity and their adaptation strategies in changing urban environments.",
+            outline: [
+              "Literature Review: Urban heat islands, pollinator ecology, and climate adaptation",
+              "Research Questions: Urban heat effects on pollinator diversity",
+              "Methodology: Urban temperature mapping and pollinator diversity surveys",
+              "Data Collection: Temperature data and pollinator species identification",
+              "Analysis: Heat island correlation with pollinator diversity",
+              "Discussion: Urban planning and pollinator conservation strategies"
+            ],
+            methodology: "Temperature mapping, pollinator surveys, diversity analysis"
+          }
+        ]
+      },
+      medicine: {
+        'high-school': [
+          {
+            title: "The Impact of Screen Time on Myopia Progression: Digital Device Usage Patterns",
+            description: "Study the relationship between digital device usage patterns and myopia progression in high school students.",
+            outline: [
+              "Introduction: Myopia progression, screen time, and digital device usage",
+              "Hypothesis: Increased screen time correlates with myopia progression",
+              "Methodology: Longitudinal study with screen time tracking and eye exams",
+              "Data Collection: Screen time logs and myopia progression measurements",
+              "Analysis: Screen time correlation with myopia development",
+              "Discussion: Digital device usage guidelines and eye health protection"
+            ],
+            methodology: "Longitudinal study, screen time tracking, myopia progression monitoring"
+          }
+        ],
+        'undergraduate': [
+          {
+            title: "Gut Microbiome and Mental Health: Probiotic Intervention for Anxiety",
+            description: "Investigate the effectiveness of probiotic interventions in reducing anxiety symptoms through gut microbiome modulation.",
+            outline: [
+              "Background: Gut-brain axis, microbiome, and mental health research",
+              "Research Questions: Probiotic effects on anxiety through microbiome changes",
+              "Methodology: Randomized controlled trial with probiotic intervention",
+              "Data Collection: Microbiome analysis and anxiety symptom assessment",
+              "Analysis: Microbiome changes and anxiety symptom correlation",
+              "Discussion: Mental health treatment and microbiome-based interventions"
+            ],
+            methodology: "Randomized controlled trial, microbiome analysis, anxiety assessment"
+          }
+        ]
+      }
+    };
+
+    // Advanced AI customization based on interests
+    const interestCustomizations = {
+      'social media': {
+        modifiers: ['social media influence', 'digital behavior', 'online interaction patterns', 'virtual community dynamics'],
+        contexts: ['in adolescent populations', 'during academic stress periods', 'in different cultural contexts', 'across socioeconomic groups']
+      },
+      'technology': {
+        modifiers: ['technological integration', 'digital transformation', 'automation effects', 'smart device usage'],
+        contexts: ['in educational settings', 'in daily life patterns', 'in professional environments', 'in social interactions']
+      },
+      'environment': {
+        modifiers: ['environmental factors', 'sustainability practices', 'climate adaptation', 'ecological interactions'],
+        contexts: ['in urban settings', 'in rural communities', 'in different climate zones', 'across seasonal changes']
+      },
+      'health': {
+        modifiers: ['health outcomes', 'wellness practices', 'preventive measures', 'lifestyle factors'],
+        contexts: ['in student populations', 'in different age groups', 'across socioeconomic status', 'in various cultural contexts']
+      },
+      'education': {
+        modifiers: ['learning outcomes', 'educational innovation', 'pedagogical approaches', 'academic performance'],
+        contexts: ['in diverse student populations', 'across different subjects', 'in various learning environments', 'with different teaching methods']
+      },
+      'psychology': {
+        modifiers: ['psychological factors', 'behavioral patterns', 'cognitive processes', 'emotional responses'],
+        contexts: ['in different age groups', 'across cultural backgrounds', 'in various social situations', 'under different stress conditions']
+      },
+      'culture': {
+        modifiers: ['cultural influences', 'societal norms', 'traditional practices', 'cross-cultural dynamics'],
+        contexts: ['in immigrant communities', 'across different regions', 'in various social classes', 'between different generations']
+      },
+      'business': {
+        modifiers: ['economic factors', 'market dynamics', 'consumer behavior', 'organizational processes'],
+        contexts: ['in different industries', 'across various markets', 'in various business models', 'under different economic conditions']
+      }
+    };
+
+    // Real AI Integration via Backend Server
+    class AIResearchGenerator {
+      constructor() {
+        this.serverUrl = 'http://localhost:3000'; // Change this to your server URL
+        this.useRealAI = true; // Always use real AI now
+      }
+
+      // Generate topics using real AI via backend
+      async generateWithAI(field, level, interests, methodology) {
+        try {
+          const response = await fetch(`${this.serverUrl}/api/generate-topics`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              field,
+              level,
+              interests,
+              methodology
+            })
+          });
+
+          const data = await response.json();
+          
+          if (!data.success) {
+            throw new Error(data.error || 'AI generation failed');
+          }
+
+          return data.topics;
+        } catch (error) {
+          console.error('AI generation failed:', error);
+          throw error;
+        }
+      }
+
+      // Check if server is available
+      async checkServerHealth() {
+        try {
+          const response = await fetch(`${this.serverUrl}/api/health`);
+          const data = await response.json();
+          return data.status === 'OK';
+        } catch (error) {
+          return false;
+        }
+      }
+    }
+
+    // Initialize AI generator
+    const aiGenerator = new AIResearchGenerator();
+
+    // Update button to show AI status
+    function updateAIStatus() {
+      const button = document.getElementById('generateBtn');
+      
+      // Remove existing status
+      const existingStatus = button.querySelector('.ai-status');
+      if (existingStatus) {
+        existingStatus.remove();
+      }
+      
+      // Add AI status
+      const status = document.createElement('span');
+      status.className = 'ai-status real';
+      status.textContent = '🤖 Real AI';
+      
+      button.appendChild(status);
+    }
+
+    // Call this when page loads
+    updateAIStatus();
+
+    // Generate truly unique and niche topics with randomization
+    function generateNicheTopic(field, level, interests, methodology) {
+      const baseIdeas = researchIdeas[field]?.[level] || [];
+      let customizedIdeas = [...baseIdeas];
+
+      // Randomize the order and select a subset for variety
+      const shuffledIdeas = [...baseIdeas].sort(() => Math.random() - 0.5);
+      const selectedIdeas = shuffledIdeas.slice(0, Math.min(3, shuffledIdeas.length));
+
+      // Add random variations to make each response unique
+      const variations = {
+        'psychology': [
+          { prefix: 'Advanced', suffix: 'in Digital Age' },
+          { prefix: 'Novel Investigation of', suffix: 'and Modern Technology' },
+          { prefix: 'Contemporary Study of', suffix: 'in Social Media Era' },
+          { prefix: 'Innovative Research on', suffix: 'and Digital Behavior' }
+        ],
+        'education': [
+          { prefix: 'Revolutionary', suffix: 'in Modern Learning' },
+          { prefix: 'Cutting-Edge', suffix: 'and Educational Technology' },
+          { prefix: 'Progressive Study of', suffix: 'in Digital Classrooms' },
+          { prefix: 'Next-Generation', suffix: 'and Learning Innovation' }
+        ],
+        'biology': [
+          { prefix: 'Breakthrough Research on', suffix: 'and Environmental Factors' },
+          { prefix: 'Pioneering Study of', suffix: 'in Modern Context' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Contemporary Challenges' },
+          { prefix: 'Advanced Analysis of', suffix: 'and Current Trends' }
+        ],
+        'chemistry': [
+          { prefix: 'State-of-the-Art', suffix: 'and Green Chemistry' },
+          { prefix: 'Modern Investigation of', suffix: 'and Sustainable Practices' },
+          { prefix: 'Contemporary Research on', suffix: 'and Environmental Impact' },
+          { prefix: 'Innovative Study of', suffix: 'and Future Applications' }
+        ],
+        'physics': [
+          { prefix: 'Quantum Analysis of', suffix: 'and Modern Physics' },
+          { prefix: 'Advanced Research on', suffix: 'and Contemporary Applications' },
+          { prefix: 'Cutting-Edge Study of', suffix: 'and Future Technology' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Modern Science' }
+        ],
+        'computer-science': [
+          { prefix: 'AI-Powered Research on', suffix: 'and Machine Learning' },
+          { prefix: 'Next-Generation Study of', suffix: 'and Digital Innovation' },
+          { prefix: 'Advanced Analysis of', suffix: 'and Computational Methods' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Modern Technology' }
+        ],
+        'sociology': [
+          { prefix: 'Contemporary Study of', suffix: 'and Social Dynamics' },
+          { prefix: 'Modern Research on', suffix: 'and Cultural Trends' },
+          { prefix: 'Advanced Analysis of', suffix: 'and Social Change' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Current Issues' }
+        ],
+        'economics': [
+          { prefix: 'Modern Economic Analysis of', suffix: 'and Market Dynamics' },
+          { prefix: 'Contemporary Research on', suffix: 'and Digital Economy' },
+          { prefix: 'Advanced Study of', suffix: 'and Economic Trends' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Modern Markets' }
+        ],
+        'environmental-science': [
+          { prefix: 'Sustainable Research on', suffix: 'and Climate Action' },
+          { prefix: 'Green Innovation Study of', suffix: 'and Environmental Protection' },
+          { prefix: 'Contemporary Analysis of', suffix: 'and Ecological Balance' },
+          { prefix: 'Modern Investigation of', suffix: 'and Sustainability' }
+        ],
+        'medicine': [
+          { prefix: 'Advanced Medical Research on', suffix: 'and Modern Healthcare' },
+          { prefix: 'Contemporary Study of', suffix: 'and Medical Innovation' },
+          { prefix: 'Cutting-Edge Analysis of', suffix: 'and Health Technology' },
+          { prefix: 'Innovative Investigation of', suffix: 'and Medical Science' }
+        ]
+      };
+
+      const fieldVariations = variations[field] || variations['psychology'];
+      const randomVariation = fieldVariations[Math.floor(Math.random() * fieldVariations.length)];
+
+      // Apply random variations to titles
+      customizedIdeas = selectedIdeas.map(idea => {
+        const randomTitle = `${randomVariation.prefix} ${idea.title} ${randomVariation.suffix}`;
+        return {
+          ...idea,
+          title: randomTitle
+        };
+      });
+
+      // Apply interest-based customization with randomization
+      if (interests.trim()) {
+        const interestWords = interests.toLowerCase().split(' ');
+        const customization = interestCustomizations[interestWords[0]] || interestCustomizations[interestWords.find(word => interestCustomizations[word])];
+        
+        if (customization) {
+          const modifier = customization.modifiers[Math.floor(Math.random() * customization.modifiers.length)];
+          const context = customization.contexts[Math.floor(Math.random() * customization.contexts.length)];
+          
+          customizedIdeas = customizedIdeas.map(idea => ({
+            ...idea,
+            title: `${idea.title}: ${modifier} ${context}`,
+            description: `${idea.description} This study specifically investigates ${modifier} ${context}, providing unique insights into how ${interests.toLowerCase()} influences the research outcomes.`,
+            outline: [
+              ...idea.outline.slice(0, -1),
+              `Specialized Analysis: ${modifier} ${context}`,
+              idea.outline[idea.outline.length - 1]
+            ]
+          }));
+        }
+      }
+
+      // Add methodology-specific customization with randomization
+      if (methodology) {
+        const methodologyEnhancements = [
+          'with specialized techniques and advanced analysis methods',
+          'incorporating cutting-edge research methodologies',
+          'utilizing state-of-the-art analytical approaches',
+          'employing innovative research strategies and methods'
+        ];
+        
+        const randomEnhancement = methodologyEnhancements[Math.floor(Math.random() * methodologyEnhancements.length)];
+        
+        customizedIdeas = customizedIdeas.map(idea => ({
+          ...idea,
+          methodology: `${methodology.charAt(0).toUpperCase() + methodology.slice(1)} approach: ${idea.methodology} ${randomEnhancement}.`
+        }));
+      }
+
+      // Add random research angles
+      const researchAngles = [
+        'with focus on emerging trends',
+        'considering contemporary challenges',
+        'addressing modern implications',
+        'exploring future applications',
+        'analyzing current developments',
+        'investigating recent innovations'
+      ];
+
+      customizedIdeas = customizedIdeas.map(idea => {
+        const randomAngle = researchAngles[Math.floor(Math.random() * researchAngles.length)];
+        return {
+          ...idea,
+          description: `${idea.description} ${randomAngle}.`
+        };
+      });
+
+      return customizedIdeas;
+    }
+
+    document.getElementById('generatorForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const field = document.getElementById('field').value;
+      const level = document.getElementById('level').value;
+      const interests = document.getElementById('interests').value;
+      const methodology = document.getElementById('methodology').value;
+
+      // Show loading
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('generateBtn').disabled = true;
+
+      try {
+        // Check if server is available
+        const serverAvailable = await aiGenerator.checkServerHealth();
+        
+        if (serverAvailable) {
+          // Use real AI via backend server
+          const ideas = await aiGenerator.generateWithAI(field, level, interests, methodology);
+          displayResults(ideas);
+        } else {
+          // Fallback to built-in generator
+          document.getElementById('loading').innerHTML = `
+            <div class="spinner"></div>
+            <p>AI server unavailable. Using built-in generator...</p>
+          `;
+          
+          setTimeout(() => {
+            generateIdeas(field, level, interests, methodology);
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('generateBtn').disabled = false;
+          }, 2000);
+          return;
+        }
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('generateBtn').disabled = false;
+        
+      } catch (error) {
+        console.error('Generation failed:', error);
+        
+        // Fallback to built-in generator
+        document.getElementById('loading').innerHTML = `
+          <div class="spinner"></div>
+          <p>AI generation failed. Using built-in generator...</p>
+        `;
+        
+        setTimeout(() => {
+          generateIdeas(field, level, interests, methodology);
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('generateBtn').disabled = false;
+        }, 2000);
+      }
+    });
+
+    // Display results function
+    function displayResults(ideas) {
+      const resultsContent = document.getElementById('resultsContent');
+      
+      let html = '';
+      ideas.forEach((idea, index) => {
+        html += `
+          <div class="result-card">
+            <h3>${idea.title}</h3>
+            <p><strong>Description:</strong> ${idea.description}</p>
+            
+            <div class="outline-section">
+              <h4>Research Outline:</h4>
+              <ol class="outline-list">
+                ${idea.outline.map(item => `<li>${item}</li>`).join('')}
+              </ol>
+            </div>
+            
+            <div class="outline-section">
+              <h4>Recommended Methodology:</h4>
+              <p>${idea.methodology}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      resultsContent.innerHTML = html;
+      document.getElementById('results').style.display = 'block';
+      
+      // Smooth scroll to results
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function generateIdeas(field, level, interests, methodology) {
+      const resultsContent = document.getElementById('resultsContent');
+      
+      // Use the advanced niche topic generator
+      let ideas = generateNicheTopic(field, level, interests, methodology);
+      
+      // If no specific ideas found, generate fallback topics
+      if (ideas.length === 0) {
+        ideas = generateFallbackTopics(field, level, interests, methodology);
+      }
+
+      // Display results
+      let html = '';
+      ideas.forEach((idea, index) => {
+        html += `
+          <div class="result-card">
+            <h3>${idea.title}</h3>
+            <p><strong>Description:</strong> ${idea.description}</p>
+            
+            <div class="outline-section">
+              <h4>Research Outline:</h4>
+              <ol class="outline-list">
+                ${idea.outline.map(item => `<li>${item}</li>`).join('')}
+              </ol>
+            </div>
+            
+            <div class="outline-section">
+              <h4>Recommended Methodology:</h4>
+              <p>${idea.methodology}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      resultsContent.innerHTML = html;
+      document.getElementById('results').style.display = 'block';
+      
+      // Smooth scroll to results
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Generate fallback topics for fields/levels not covered with randomization
+    function generateFallbackTopics(field, level, interests, methodology) {
+      const fieldTopics = {
+        'psychology': ['cognitive processes', 'behavioral patterns', 'emotional responses', 'social interactions', 'mental processes', 'psychological phenomena'],
+        'education': ['learning outcomes', 'pedagogical approaches', 'student engagement', 'academic performance', 'educational innovation', 'teaching methodologies'],
+        'biology': ['biological systems', 'organism behavior', 'physiological responses', 'ecological interactions', 'cellular processes', 'genetic mechanisms'],
+        'chemistry': ['chemical processes', 'molecular interactions', 'reaction mechanisms', 'material properties', 'synthesis methods', 'catalytic processes'],
+        'physics': ['physical phenomena', 'energy transfer', 'wave properties', 'quantum effects', 'thermodynamic processes', 'electromagnetic interactions'],
+        'computer-science': ['algorithmic processes', 'data structures', 'computational efficiency', 'system design', 'machine learning', 'artificial intelligence'],
+        'sociology': ['social structures', 'group dynamics', 'cultural patterns', 'institutional behavior', 'social networks', 'community interactions'],
+        'economics': ['market dynamics', 'consumer behavior', 'resource allocation', 'economic efficiency', 'financial systems', 'trade patterns'],
+        'environmental-science': ['environmental systems', 'ecological processes', 'sustainability practices', 'climate interactions', 'biodiversity patterns', 'conservation strategies'],
+        'medicine': ['health outcomes', 'physiological responses', 'treatment effectiveness', 'preventive measures', 'diagnostic methods', 'therapeutic approaches']
+      };
+
+      const levelComplexity = {
+        'high-school': 'basic',
+        'undergraduate': 'intermediate',
+        'graduate': 'advanced',
+        'phd': 'expert'
+      };
+
+      const researchPrefixes = [
+        'Novel Investigation of',
+        'Advanced Analysis of',
+        'Contemporary Study of',
+        'Innovative Research on',
+        'Cutting-Edge Investigation of',
+        'Pioneering Study of',
+        'Revolutionary Research on',
+        'State-of-the-Art Analysis of'
+      ];
+
+      const researchSuffixes = [
+        'in Modern Context',
+        'and Current Trends',
+        'with Contemporary Applications',
+        'in Digital Age',
+        'and Future Implications',
+        'with Modern Technology',
+        'and Emerging Patterns',
+        'in Contemporary Society'
+      ];
+
+      const topics = fieldTopics[field] || ['general phenomena', 'specific processes', 'unique characteristics'];
+      const complexity = levelComplexity[level] || 'intermediate';
+
+      // Randomize topic selection and research approach
+      const shuffledTopics = [...topics].sort(() => Math.random() - 0.5);
+      const selectedTopics = shuffledTopics.slice(0, 3);
+      
+      const randomPrefix = researchPrefixes[Math.floor(Math.random() * researchPrefixes.length)];
+      const randomSuffix = researchSuffixes[Math.floor(Math.random() * researchSuffixes.length)];
+
+      return selectedTopics.map((topic, index) => {
+        const randomVariation = Math.random() > 0.5;
+        const title = randomVariation 
+          ? `${randomPrefix} ${topic.charAt(0).toUpperCase() + topic.slice(1)} in ${field.charAt(0).toUpperCase() + field.slice(1)}: A ${complexity} Analysis ${randomSuffix}`
+          : `Advanced ${complexity} Investigation of ${topic.charAt(0).toUpperCase() + topic.slice(1)} and ${field.charAt(0).toUpperCase() + field.slice(1)} Dynamics`;
+
+        const descriptionVariations = [
+          `Conduct a comprehensive ${complexity} investigation into ${topic} within the context of ${field}, exploring unique aspects that have not been previously examined in this specific domain.`,
+          `Perform an innovative ${complexity} analysis of ${topic} and its relationship to ${field}, uncovering novel patterns and contemporary implications.`,
+          `Execute a cutting-edge ${complexity} study examining ${topic} in the context of ${field}, with focus on emerging trends and future applications.`
+        ];
+
+        const randomDescription = descriptionVariations[Math.floor(Math.random() * descriptionVariations.length)];
+
+        return {
+          title: title,
+          description: randomDescription,
+          outline: [
+            `Introduction: ${field} and ${topic} theoretical framework`,
+            `Research Questions: Novel aspects of ${topic} in ${field}`,
+            `Methodology: ${complexity} research design and data collection`,
+            `Data Collection: Specialized measurement and analysis techniques`,
+            `Analysis: Advanced statistical and analytical approaches`,
+            `Discussion: Implications and future research directions`
+          ],
+          methodology: `${complexity.charAt(0).toUpperCase() + complexity.slice(1)} research methodology with specialized ${field} techniques and ${topic} analysis methods.`
+        };
+      });
+    }
+  </script>
+
+</body>
+</html> 
